@@ -1,37 +1,44 @@
-﻿using EducationCenter.Data.IRepositories;
+﻿using EducationCenter.Data.DbContexts;
+using EducationCenter.Data.IRepositories;
 using EducationCenter.Domain.Commons;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducationCenter.Data.Repositories;
 
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditable
 {
-    public Task DeleteAsync(long id)
+    private readonly AppDbContext appDbContext;
+    private readonly DbSet<TEntity> dbSet;
+
+    public Repository(AppDbContext appDbContext)
     {
-        return Task.CompletedTask;
+        this.appDbContext = appDbContext;
+        this.dbSet = appDbContext.Set<TEntity>();
+    }
+    public async Task DeleteAsync(long id)
+    {
+        var entity = await this.dbSet.FindAsync(id);
+        this.dbSet.Remove(entity);
     }
 
-    public Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        await this.dbSet.AddAsync(entity);
+        return entity; 
     }
 
-    public Task<TEntity> InsertAsync(TEntity entity)
+    public async Task<bool> SaveChangeAsync()
     {
-        throw new NotImplementedException();
+        await this.SaveChangeAsync();
+        return true;
     }
 
-    public Task<bool> SaveChangeAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public IQueryable<TEntity> GetAll()
+        => this.dbSet;
 
-    public Task<long> SelectByIdAsync(long id)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<TEntity> SelectByIdAsync(long id)
+        => await this.dbSet.FindAsync(id);
 
     public void UpdateAsync(TEntity entity)
-    {
-        throw new NotImplementedException();
-    }
+        => this.dbSet.Update(entity);
 }
