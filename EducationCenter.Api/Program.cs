@@ -1,4 +1,7 @@
 
+using EducationCenter.Data.DbContexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace EducationCenter.Api
 {
     public class Program
@@ -8,6 +11,8 @@ namespace EducationCenter.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

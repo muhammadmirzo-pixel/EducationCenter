@@ -2,6 +2,10 @@
 
 namespace EducationCenter.Domain.Entites;
 
+
+/// <summary>
+/// this entity is group-level
+/// </summary>
 public class Group : Auditable
 {
     public long CourseId { get; set; }
