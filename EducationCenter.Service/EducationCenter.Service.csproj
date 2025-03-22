@@ -6,4 +6,13 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EducationCenter.Data\EducationCenter.Data.csproj" />
+    <ProjectReference Include="..\EducationCenter.Domain\EducationCenter.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
