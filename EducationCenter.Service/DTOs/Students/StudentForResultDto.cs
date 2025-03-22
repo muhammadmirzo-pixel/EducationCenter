@@ -1,9 +1,9 @@
-﻿using EducationCenter.Service.DTOs.CourseDTOs;
-using EducationCenter.Service.DTOs.GroupDTOs;
-using EducationCenter.Service.DTOs.StudentGroupDTOs;
+﻿using EducationCenter.Service.DTOs.Courses;
+using EducationCenter.Service.DTOs.Groups;
+using EducationCenter.Service.DTOs.StudentsGroup;
 using System.Text.RegularExpressions;
 
-namespace EducationCenter.Service.DTOs.StudentDTOs;
+namespace EducationCenter.Service.DTOs.Students;
 
 public class StudentForResultDto
 {

@@ -15,6 +15,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
         this.appDbContext = appDbContext;
         this.dbSet = appDbContext.Set<TEntity>();
     }
+
     public async Task DeleteAsync(long id)
     {
         var entity = await this.dbSet.FindAsync(id);
@@ -26,6 +27,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
     {
         await this.dbSet.AddAsync(entity);
         await this.SaveChangeAsync();
+
         return entity; 
     }
     public async void UpdateAsync(TEntity entity)

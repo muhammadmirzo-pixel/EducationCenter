@@ -1,4 +1,4 @@
-﻿namespace EducationCenter.Service.DTOs.StudentGroupDTOs;
+﻿namespace EducationCenter.Service.DTOs.StudentsGroup;
 
 public class StudentGroupForCreationDto
 {

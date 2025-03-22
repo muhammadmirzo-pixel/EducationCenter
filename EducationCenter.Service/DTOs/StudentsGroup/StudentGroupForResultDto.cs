@@ -1,7 +1,7 @@
-﻿using EducationCenter.Service.DTOs.GroupDTOs;
-using EducationCenter.Service.DTOs.StudentDTOs;
+﻿using EducationCenter.Service.DTOs.Groups;
+using EducationCenter.Service.DTOs.Students;
 
-namespace EducationCenter.Service.DTOs.StudentGroupDTOs;
+namespace EducationCenter.Service.DTOs.StudentsGroup;
 
 public class StudentGroupForResultDto
 {

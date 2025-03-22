@@ -1,6 +1,6 @@
-﻿namespace EducationCenter.Service.DTOs.CourseDTOs;
+﻿namespace EducationCenter.Service.DTOs.Courses;
 
-public class CourseForCreationDto
+public class CourseForUpdateDto
 {
     public string CourseName { get; set; }
     public string Teacher { get; set; }

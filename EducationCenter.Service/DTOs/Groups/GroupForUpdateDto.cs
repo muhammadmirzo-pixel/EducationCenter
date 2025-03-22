@@ -1,4 +1,4 @@
-﻿namespace EducationCenter.Service.DTOs.GroupDTOs;
+﻿namespace EducationCenter.Service.DTOs.Groups;
 
 public class GroupForUpdateDto
 {
