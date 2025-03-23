@@ -1,7 +1,9 @@
-﻿namespace EducationCenter.Service.DTOs.StudentsGroup;
+﻿using EducationCenter.Domain.Entites;
+
+namespace EducationCenter.Service.DTOs.StudentsGroup;
 
 public class StudentGroupForCreationDto
 {
-    public string CourseName { get; set; }
-    public string StudentGroupName { get; set; }
+    public long StudentId { get; set; }
+    public long GroupId { get; set; }
 }

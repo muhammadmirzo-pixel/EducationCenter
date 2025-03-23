@@ -4,6 +4,6 @@ namespace EducationCenter.Service.DTOs.Groups;
 
 public class GroupForCreationDto
 { 
-    public CourseForResultDto Course { get; set; } 
+    public long CourseId { get; set; }
     public string GroupName { get; set; }
 }

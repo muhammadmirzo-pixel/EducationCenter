@@ -4,6 +4,6 @@ namespace EducationCenter.Service.DTOs.StudentsGroup;
 
 public class StudentGroupForUpdateDto
 {
-    public GroupForResultDto GroupName { get; set; }
-    public int StudentCount { get; set; }
+    public long StudentId { get; set; }
+    public long GroupId { get; set; }
 }

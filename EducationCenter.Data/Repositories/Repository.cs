@@ -20,30 +20,24 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
     {
         var entity = await this.dbSet.FindAsync(id);
         this.dbSet.Remove(entity);
-        await this.SaveChangeAsync();
     }
 
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        await this.dbSet.AddAsync(entity);
-        await this.SaveChangeAsync();
+        var result = await this.dbSet.AddAsync(entity);
 
-        return entity; 
+        return result.Entity;
     }
-    public async void UpdateAsync(TEntity entity)
+    public void UpdateAsync(TEntity entity)
     {
         this.dbSet.Update(entity);
-        await this.SaveChangeAsync();
     }
 
     public async Task<bool> SaveChangeAsync()
-    {
-        await this.SaveChangeAsync();
-        return true;
-    }
+        => await this.appDbContext.SaveChangesAsync() > 0;
 
     public IQueryable<TEntity> GetAll()
-        => this.dbSet;
+        => dbSet;
 
     public async Task<TEntity> SelectByIdAsync(long id)
         => await this.dbSet.FindAsync(id);

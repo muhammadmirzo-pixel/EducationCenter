@@ -7,8 +7,8 @@ namespace EducationCenter.Service.DTOs.Students;
 
 public class StudentForResultDto
 {
-    public long StudentId { get; set; }
+    public long Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public GroupForResultDto StudentGroups { get; set; }
+    public ICollection<StudentGroupForResultDto> StudentGroups { get; set; }
 }

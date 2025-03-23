@@ -6,5 +6,5 @@ namespace EducationCenter.Service.DTOs.StudentsGroup;
 public class StudentGroupForResultDto
 {
     public GroupForResultDto Group { get; set; }
-    public ICollection<StudentForResultDto> StudentList { get; set; }
+    public StudentForResultDto Student { get; set; }
 }

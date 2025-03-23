@@ -11,21 +11,21 @@ namespace EducationCenter.Service.Services;
 public class StudentService : IStudentService
 {
     private readonly IRepository<Student> stRepository;
-    private readonly IRepository<Group> repository;
     private readonly IMapper mapper;
 
-    public StudentService()
+    public StudentService(IRepository<Student> stRepository, IMapper mapper)
     {
-         
+        this.stRepository = stRepository;
+        this.mapper = mapper;
     }
     public async Task<StudentForResultDto> AddAsync(StudentForCreationDto dto)
     {
-        var group = await this.repository.GetAll()
+        var group = await this.stRepository.GetAll()
             .AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Id.Equals(dto.GroupId));
+            .FirstOrDefaultAsync(g => g.Email == dto.Email);
 
-        if (group is null)
-            throw new CustomException(404, "group not found");
+        if (group is not null)
+            throw new CustomException(404, "group is already exist");
 
         var student = this.mapper.Map<Student>(dto);
         student.CreatedAt = DateTime.UtcNow;
@@ -36,14 +36,14 @@ public class StudentService : IStudentService
         return this.mapper.Map<StudentForResultDto>(insertedStudent);
     }
 
-    public async Task<IQueryable<StudentForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<StudentForResultDto>> GetAllAsync()
     {
         var studentsList = await this.stRepository.GetAll()
             .AsNoTracking()
             .OrderBy(s => s.Id)
             .ToListAsync();
 
-        return mapper.Map<IQueryable<StudentForResultDto>>(studentsList);
+        return mapper.Map<IEnumerable<StudentForResultDto>>(studentsList);
     }
 
     public async Task<StudentForResultDto> GetByIdAsync(long id)
