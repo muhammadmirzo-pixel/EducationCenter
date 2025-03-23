@@ -29,14 +29,14 @@ public class StudentGroupService : IStudentGroupService
         return await this.studentGroupRepository.SaveChangeAsync();
     }
 
-    public async Task<IQueryable<StudentGroupForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<StudentGroupForResultDto>> GetAllAsync()
     {
         var studentGroups = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
             .OrderBy(sg => sg.Id)
             .ToListAsync();
 
-        return this.mapper.Map<IQueryable<StudentGroupForResultDto>>(studentGroups);
+        return this.mapper.Map<IEnumerable<StudentGroupForResultDto>>(studentGroups);
     }
 
     public async Task<StudentGroupForResultDto> GetByIdAsync(long id)
@@ -48,20 +48,26 @@ public class StudentGroupService : IStudentGroupService
         return this.mapper.Map<StudentGroupForResultDto>(studentGroup);
     }
 
-    /*public async Task<StudentGroupForResultDto> GetByNameAsync(string name)
+    public async Task<IEnumerable<StudentGroupForResultDto>> GetByNameAsync(string name)
     {
         var studentGroup = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
-            .FirstOrDefaultAsync(g => g. == name);
-
+            .Where(g => g.Student.FirstName.Contains(name))
+            .OrderBy(Group => Group.Id)
+            .ToListAsync();
         if (studentGroup == null)
             throw new CustomException(404, "Student group not found");
 
-        return this.mapper.Map<StudentGroupForResultDto>(studentGroup);
-    }*/
+        return this.mapper.Map<IEnumerable<StudentGroupForResultDto>>(studentGroup);
+    }
 
     public async Task<StudentGroupForResultDto> AddAsync(StudentGroupForCreationDto dto)
     {
+        var isInfoExist = await this.studentGroupRepository.GetAll()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(sg => sg.GroupId == dto.GroupId && sg.StudentId == dto.StudentId);
+        if (isInfoExist != null) throw new CustomException(409, "Student group already exist");
+
         var studentGroup = this.mapper.Map<StudentGroup>(dto);
         var insertedStudentGroup = await this.studentGroupRepository.InsertAsync(studentGroup);
         await this.studentGroupRepository.SaveChangeAsync();
@@ -76,7 +82,6 @@ public class StudentGroupService : IStudentGroupService
             throw new CustomException(404, "Student group not found");
 
         var mappedStudentGroup = this.mapper.Map(dto, studentGroup);
-        this.studentGroupRepository.UpdateAsync(mappedStudentGroup);
         await this.studentGroupRepository.SaveChangeAsync();
 
         return this.mapper.Map<StudentGroupForResultDto>(mappedStudentGroup);

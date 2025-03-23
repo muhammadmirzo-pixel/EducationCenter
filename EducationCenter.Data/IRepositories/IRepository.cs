@@ -2,7 +2,7 @@
 
 namespace EducationCenter.Data.IRepositories;
 
-public interface IRepository<TEntity> where TEntity : Auditable
+public interface IRepository<TEntity>
 {
     Task<TEntity> InsertAsync (TEntity entity);
     Task DeleteAsync (long id);

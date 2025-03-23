@@ -25,7 +25,7 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
     {
         var checkCourse = await this.courseRepository.GetAll()
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Name == dto.Course.CourseName);
+            .FirstOrDefaultAsync(c => c.Id == dto.CourseId);
         
         if (checkCourse == null) 
             throw new CustomException(404, "Course not found");
@@ -39,14 +39,14 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
         return this.mapper.Map<GroupForResultDto>(insertedGroup);
     }
 
-    public async Task<IQueryable<GroupForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<GroupForResultDto>> GetAllAsync()
     {
         var groups = await this.groupRepository.GetAll()
             .AsNoTracking()
             .OrderBy(g => g.Id)
             .ToListAsync();
 
-        return this.mapper.Map<IQueryable<GroupForResultDto>>(groups);
+        return this.mapper.Map<IEnumerable<GroupForResultDto>>(groups);
     }
 
     public async Task<GroupForResultDto> GetByIdAsync(long id)
@@ -56,6 +56,19 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
             throw new CustomException(404, "Group not found");
 
         return this.mapper.Map<GroupForResultDto>(group);
+    }
+
+    public async Task<IEnumerable<GroupForResultDto>> GetByNameAsync(string name)
+    {
+        var searchingGroup = await this.groupRepository.GetAll()
+            .AsNoTracking()
+            .Where(g => g.GroupName.Contains(name))
+            .OrderBy(g => g.Id)
+            .ToListAsync();
+        if(searchingGroup == null) 
+            throw new CustomException(404, "Group not found");
+
+        return this.mapper.Map<IEnumerable<GroupForResultDto>>(searchingGroup);
     }
 
     public async Task<bool> RemoveAsync(long id)
@@ -75,7 +88,6 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
             throw new CustomException(404, "Group not found");
 
         var mappedGroup = this.mapper.Map(dto, group);
-        this.groupRepository.UpdateAsync(mappedGroup);
         await this.groupRepository.SaveChangeAsync();
 
         return this.mapper.Map<GroupForResultDto>(mappedGroup);

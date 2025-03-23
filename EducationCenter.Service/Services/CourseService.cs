@@ -2,9 +2,12 @@
 using EducationCenter.Data.IRepositories;
 using EducationCenter.Domain.Entites;
 using EducationCenter.Service.DTOs.Courses;
+using EducationCenter.Service.DTOs.StudentsGroup;
 using EducationCenter.Service.Exceptions;
 using EducationCenter.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace EducationCenter.Service.Services;
 
@@ -21,26 +24,29 @@ public class CourseService : ICourseService
 
     public async Task<CourseForResultDto> AddAsync(CourseForCreationDto dto)
     {
+        var isCourseExist = await this.courseRepository.GetAll()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.CourseName == dto.CourseName);
+        if (isCourseExist != null) 
+            throw new CustomException(409, "Course already exist");
+
         var course = this.mapper.Map<Course>(dto);
         course.CreatedAt = DateTime.UtcNow;
         
         var insertedCourse = await this.courseRepository.InsertAsync(course);
         await this.courseRepository.SaveChangeAsync();
-        var isSaved = await this.courseRepository.SaveChangeAsync();
-        if (!isSaved)
-            throw new CustomException(500, "Database ga saqlashda xatolik yuz berdi.");
 
         return this.mapper.Map<CourseForResultDto>(insertedCourse);
     }
 
-    public async Task<IQueryable<CourseForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<CourseForResultDto>> GetAllAsync()
     {
         var courses = await this.courseRepository.GetAll()
             .AsNoTracking()
             .OrderBy(c => c.Id)
             .ToListAsync();
 
-        return this.mapper.Map<IQueryable<CourseForResultDto>>(courses);
+        return this.mapper.Map<IEnumerable<CourseForResultDto>>(courses);
     }
 
     public async Task<CourseForResultDto> GetByIdAsync(long id)
@@ -52,16 +58,16 @@ public class CourseService : ICourseService
         return this.mapper.Map<CourseForResultDto>(course);
     }
 
-    public async Task<CourseForResultDto> GetByNameAsync(string name)
+    public async Task<IEnumerable<CourseForResultDto>> GetByNameAsync(string name)
     {
-        var course = await this.courseRepository.GetAll()
+        var courses = await this.courseRepository.GetAll()
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Name == name);
-
-        if (course == null)
+            .Where(c => c.CourseName.Contains(name))
+            .ToListAsync();
+        if (courses == null)
             throw new CustomException(404, "Course not found");
 
-        return this.mapper.Map<CourseForResultDto>(course);
+        return this.mapper.Map<IEnumerable<CourseForResultDto>>(courses);
     }
 
     public async Task<bool> RemoveAsync(long id)
@@ -81,7 +87,6 @@ public class CourseService : ICourseService
             throw new CustomException(404, "Course not found");
 
         var mapped = this.mapper.Map(dto, course);
-        this.courseRepository.UpdateAsync(mapped);
         await this.courseRepository.SaveChangeAsync();
 
         return this.mapper.Map<CourseForResultDto>(mapped);

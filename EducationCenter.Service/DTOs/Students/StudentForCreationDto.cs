@@ -1,4 +1,6 @@
-﻿namespace EducationCenter.Service.DTOs.Students;
+﻿using EducationCenter.Service.DTOs.StudentsGroup;
+
+namespace EducationCenter.Service.DTOs.Students;
 
 public class StudentForCreationDto
 {
@@ -6,5 +8,4 @@ public class StudentForCreationDto
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    public long GroupId { get; set; }
 }
