@@ -39,6 +39,13 @@ public class StudentController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("search")]
+    public async Task<IActionResult> GetByName([FromQuery] string name)
+    {
+        var result = await this.studentService.GetByNameAsync(name);
+        return Ok(result);
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAsync(long id, [FromBody] StudentForUpdateDto dto)
     {

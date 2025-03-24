@@ -1,5 +1,6 @@
 ﻿using EducationCenter.Domain.Entites;
 using EducationCenter.Service.DTOs.Courses;
+using EducationCenter.Service.DTOs.StudentsGroup;
 
 namespace EducationCenter.Service.DTOs.Groups;
 

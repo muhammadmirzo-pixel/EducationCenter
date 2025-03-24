@@ -1,4 +1,6 @@
-﻿namespace EducationCenter.Service.DTOs.Courses;
+﻿using EducationCenter.Service.DTOs.StudentsGroup;
+
+namespace EducationCenter.Service.DTOs.Courses;
 
 public class CourseForResultDto
 {

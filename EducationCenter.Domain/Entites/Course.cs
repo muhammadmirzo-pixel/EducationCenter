@@ -10,5 +10,4 @@ public class Course : Auditable
 {
     public string CourseName { get; set; }
     public string Teacher { get; set; }
-    public ICollection<Group> Groups { get; set; }
 }

@@ -17,9 +17,9 @@ public class CourseController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var result = this.courseService.GetAllAsync();
+        var result = await this.courseService.GetAllAsync();
         return Ok(result);
     }
 
@@ -38,6 +38,14 @@ public class CourseController : ControllerBase
     public async Task<ActionResult<CourseForResultDto>> GetByIdAsync(long id)
     {
         var result = await this.courseService.GetByIdAsync(id);
+        return Ok(result);
+    }
+
+
+    [HttpGet("search")]
+    public async Task<IActionResult> GetByName([FromQuery] string name)
+    {
+        var result = await this.courseService.GetByNameAsync(name);
         return Ok(result);
     }
 

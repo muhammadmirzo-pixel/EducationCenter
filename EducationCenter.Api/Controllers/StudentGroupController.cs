@@ -55,7 +55,7 @@ public class StudentGroupController : ControllerBase
     {
         var isDeleted = await this.studentGroupService.RemoveAsync(id);
         if (isDeleted)
-            return NoContent();
+            return Ok();
 
         return BadRequest("Failed to delete the student group.");
     }
