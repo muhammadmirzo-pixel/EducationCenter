@@ -37,7 +37,7 @@ EducationCenter/
 ### 📥 Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/education-center.git
+   git clone https://github.com/muhammadmirzo-pixel/education-center.git
    cd education-center
    ```
 2. Configure **appsettings.json** with your MSSQL connection string.
