@@ -23,20 +23,22 @@ public class StudentGroupController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(long id)
     {
-        var result = await studentGroupService.GetByIdAsync(id);
+        var result = await this.studentGroupService.GetByIdAsync(id);
         return Ok(result);
     }
 
-    [HttpGet("search")]
+    /*[HttpGet("search")]
     public async Task<IActionResult> GetByName([FromQuery] string name)
     {
-        var result = await studentGroupService.GetByNameAsync(name);
+        var result = await this.studentGroupService.GetByNameAsync(name);
         return Ok(result);
-    }
+    }*/
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] StudentGroupForCreationDto dto)
+    public async Task<IActionResult> PostAsync([FromBody] StudentGroupForCreationDto dto)
     {
+        if (dto == null) return BadRequest("Invalid data");
+
         var result = await studentGroupService.AddAsync(dto);
         return Ok(result);
     }
@@ -44,14 +46,14 @@ public class StudentGroupController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, [FromBody] StudentGroupForUpdateDto dto)
     {
-        var result = await studentGroupService.UpdateAsync(id, dto);
+        var result = await this.studentGroupService.UpdateAsync(id, dto);
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id)
     {
-        var isDeleted = await studentGroupService.RemoveAsync(id);
+        var isDeleted = await this.studentGroupService.RemoveAsync(id);
         if (isDeleted)
             return NoContent();
 

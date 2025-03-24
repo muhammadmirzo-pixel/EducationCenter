@@ -26,6 +26,8 @@ public class StudentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] StudentForCreationDto dto)
     {
+        if (dto == null) return BadRequest("Invalid data");
+
         var result = await this.studentService.AddAsync(dto);
         return Ok(result);
     }

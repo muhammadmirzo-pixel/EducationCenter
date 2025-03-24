@@ -33,6 +33,7 @@ public class StudentGroupService : IStudentGroupService
     {
         var studentGroups = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
+            //.Include(sg => sg.StudentInformation)   
             .OrderBy(sg => sg.Id)
             .ToListAsync();
 
@@ -48,7 +49,7 @@ public class StudentGroupService : IStudentGroupService
         return this.mapper.Map<StudentGroupForResultDto>(studentGroup);
     }
 
-    public async Task<IEnumerable<StudentGroupForResultDto>> GetByNameAsync(string name)
+    /*public async Task<IEnumerable<StudentGroupForResultDto>> GetByNameAsync(string name)
     {
         var studentGroup = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
@@ -59,7 +60,7 @@ public class StudentGroupService : IStudentGroupService
             throw new CustomException(404, "Student group not found");
 
         return this.mapper.Map<IEnumerable<StudentGroupForResultDto>>(studentGroup);
-    }
+    }*/
 
     public async Task<StudentGroupForResultDto> AddAsync(StudentGroupForCreationDto dto)
     {
@@ -69,6 +70,7 @@ public class StudentGroupService : IStudentGroupService
         if (isInfoExist != null) throw new CustomException(409, "Student group already exist");
 
         var studentGroup = this.mapper.Map<StudentGroup>(dto);
+        studentGroup.CreatedAt = DateTime.UtcNow;
         var insertedStudentGroup = await this.studentGroupRepository.InsertAsync(studentGroup);
         await this.studentGroupRepository.SaveChangeAsync();
 
@@ -80,7 +82,8 @@ public class StudentGroupService : IStudentGroupService
         var studentGroup = await this.studentGroupRepository.SelectByIdAsync(id);
         if (studentGroup == null)
             throw new CustomException(404, "Student group not found");
-
+        
+        studentGroup.UpdatedAt = DateTime.UtcNow;
         var mappedStudentGroup = this.mapper.Map(dto, studentGroup);
         await this.studentGroupRepository.SaveChangeAsync();
 
