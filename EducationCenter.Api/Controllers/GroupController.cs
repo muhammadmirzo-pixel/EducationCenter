@@ -18,9 +18,9 @@ public class GroupController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var result = this.groupService.GetAllAsync();
+        var result = await this.groupService.GetAllAsync();
         return Ok(result);
     }
 
@@ -39,6 +39,14 @@ public class GroupController : ControllerBase
     public async Task<ActionResult<GroupForResultDto>> GetByIdAsync(long id)
     {
         var result = await this.groupService.GetByIdAsync(id);
+        return Ok(result);
+    }
+
+
+    [HttpGet("search")]
+    public async Task<IActionResult> GetByName([FromQuery] string name)
+    {
+        var result = await this.groupService.GetByNameAsync(name);
         return Ok(result);
     }
 

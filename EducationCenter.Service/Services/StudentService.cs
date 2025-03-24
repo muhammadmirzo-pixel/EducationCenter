@@ -56,16 +56,17 @@ public class StudentService : IStudentService
         return this.mapper.Map<StudentForResultDto>(student);
     }
 
-    public async Task<StudentForResultDto> GetByNameAsync(string name)
+    public async Task<IEnumerable<StudentForResultDto>> GetByNameAsync(string name)
     {
         var student = await this.stRepository.GetAll()
             .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.FirstName == name || s.LastName == name);
-
+            .Include(s => s.StudentGroups)
+            .Where(s => s.FirstName.Contains(name) || s.LastName.Contains(name))
+            .ToListAsync(); 
         if (student is null)
             throw new CustomException(404, "student not found");
 
-        return this.mapper.Map<StudentForResultDto>(student);
+        return this.mapper.Map<IEnumerable<StudentForResultDto>>(student);
     }
 
 

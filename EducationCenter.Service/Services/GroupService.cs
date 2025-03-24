@@ -2,6 +2,7 @@
 using EducationCenter.Data.IRepositories;
 using EducationCenter.Domain.Entites;
 using EducationCenter.Service.DTOs.Groups;
+using EducationCenter.Service.DTOs.Students;
 using EducationCenter.Service.Exceptions;
 using EducationCenter.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,7 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
     {
         var groups = await this.groupRepository.GetAll()
             .AsNoTracking()
+            .Include(g => g.StudentGroups)
             .OrderBy(g => g.Id)
             .ToListAsync();
 

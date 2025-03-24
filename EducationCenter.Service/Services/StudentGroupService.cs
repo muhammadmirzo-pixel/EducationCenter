@@ -33,7 +33,6 @@ public class StudentGroupService : IStudentGroupService
     {
         var studentGroups = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
-            //.Include(sg => sg.StudentInformation)   
             .OrderBy(sg => sg.Id)
             .ToListAsync();
 
