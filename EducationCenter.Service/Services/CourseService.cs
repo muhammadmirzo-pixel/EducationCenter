@@ -86,6 +86,7 @@ public class CourseService : ICourseService
         if (course is null)
             throw new CustomException(404, "Course not found");
 
+        course.UpdatedAt = DateTime.UtcNow;
         var mapped = this.mapper.Map(dto, course);
         await this.courseRepository.SaveChangeAsync();
 

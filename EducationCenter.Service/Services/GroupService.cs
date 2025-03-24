@@ -87,7 +87,9 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
         if (group == null)
             throw new CustomException(404, "Group not found");
 
+
         var mappedGroup = this.mapper.Map(dto, group);
+        mappedGroup.UpdatedAt = DateTime.UtcNow;
         await this.groupRepository.SaveChangeAsync();
 
         return this.mapper.Map<GroupForResultDto>(mappedGroup);

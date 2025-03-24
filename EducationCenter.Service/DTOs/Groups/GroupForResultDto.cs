@@ -7,5 +7,5 @@ public class GroupForResultDto
 {
     public long Id { get; set; }
     public string GroupName { get; set; }
-    public CourseForResultDto CourseName { get; set; }
+    public long CourseId { get; set; }
 }

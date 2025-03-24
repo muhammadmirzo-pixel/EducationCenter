@@ -40,6 +40,7 @@ public class StudentService : IStudentService
     {
         var studentsList = await this.stRepository.GetAll()
             .AsNoTracking()
+            .Include(s => s.StudentGroups)
             .OrderBy(s => s.Id)
             .ToListAsync();
 

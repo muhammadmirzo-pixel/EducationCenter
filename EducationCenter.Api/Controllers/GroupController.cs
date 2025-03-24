@@ -28,6 +28,8 @@ public class GroupController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostCourse([FromBody] GroupForCreationDto dto)
     {
+        if (dto == null) return BadRequest("Invalid data");
+
         var result = await this.groupService.AddAsync(dto);
         return Ok(result);
     }
