@@ -30,9 +30,9 @@ EducationCenter/
 
 ## 🚀 Getting Started
 ### 🔧 Prerequisites
-- .NET SDK 7.0+
+- .NET SDK 8.0
 - MSSQL Server
-- Visual Studio or VS Code
+- Visual Studio
 
 ### 📥 Installation
 1. Clone the repository:
