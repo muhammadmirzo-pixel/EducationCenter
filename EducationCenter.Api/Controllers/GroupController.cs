@@ -2,6 +2,7 @@
 using EducationCenter.Service.DTOs.Groups;
 using EducationCenter.Service.Interfaces;
 using EducationCenter.Service.Services;
+using EducationCenter.Service.Services.Paginations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationCenter.Api.Controllers;
@@ -18,9 +19,9 @@ public class GroupController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(Pagination pagination)
     {
-        var result = await this.groupService.GetAllAsync();
+        var result = await this.groupService.GetAllAsync(pagination);
         return Ok(result);
     }
 

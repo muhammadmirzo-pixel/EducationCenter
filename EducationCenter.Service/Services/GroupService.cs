@@ -5,6 +5,7 @@ using EducationCenter.Service.DTOs.Groups;
 using EducationCenter.Service.DTOs.Students;
 using EducationCenter.Service.Exceptions;
 using EducationCenter.Service.Interfaces;
+using EducationCenter.Service.Services.Paginations;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationCenter.Service.Services;
@@ -40,12 +41,20 @@ public class GroupService(IRepository<Group> groupRepository, IRepository<Course
         return this.mapper.Map<GroupForResultDto>(insertedGroup);
     }
 
-    public async Task<IEnumerable<GroupForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<GroupForResultDto>> GetAllAsync(Pagination pagination)
     {
+        pagination ??= new Pagination
+        {
+            PageNumber = 1,
+            PageSize = 10
+        };
+
         var groups = await this.groupRepository.GetAll()
             .AsNoTracking()
             .Include(g => g.StudentGroups)
             .OrderBy(g => g.Id)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .ToListAsync();
 
         return this.mapper.Map<IEnumerable<GroupForResultDto>>(groups);
