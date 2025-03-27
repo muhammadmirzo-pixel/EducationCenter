@@ -5,6 +5,7 @@ using EducationCenter.Service.DTOs.Courses;
 using EducationCenter.Service.DTOs.StudentsGroup;
 using EducationCenter.Service.Exceptions;
 using EducationCenter.Service.Interfaces;
+using EducationCenter.Service.Services.Paginations;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,11 +40,19 @@ public class CourseService : ICourseService
         return this.mapper.Map<CourseForResultDto>(insertedCourse);
     }
 
-    public async Task<IEnumerable<CourseForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<CourseForResultDto>> GetAllAsync(Pagination pagination)
     {
+        pagination ??= new Pagination 
+        {
+            PageNumber = 1,
+            PageSize = 10
+        };
+
         var courses = await this.courseRepository.GetAll()
             .AsNoTracking()
             .OrderBy(c => c.Id)
+            .Skip((pagination.PageNumber -1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .ToListAsync();
 
         return this.mapper.Map<IEnumerable<CourseForResultDto>>(courses);

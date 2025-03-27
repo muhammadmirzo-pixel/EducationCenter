@@ -1,6 +1,7 @@
 ﻿using EducationCenter.Service.DTOs.Students;
 using EducationCenter.Service.Interfaces;
 using EducationCenter.Service.Services;
+using EducationCenter.Service.Services.Paginations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationCenter.Api.Controllers;
@@ -17,9 +18,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(Pagination pagination)
     {
-        var result = await this.studentService.GetAllAsync();
+        var result = await this.studentService.GetAllAsync(pagination);
         return Ok(result);
     }
 

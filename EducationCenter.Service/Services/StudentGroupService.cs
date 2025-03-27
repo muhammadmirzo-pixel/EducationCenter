@@ -4,6 +4,7 @@ using EducationCenter.Domain.Entites;
 using EducationCenter.Service.DTOs.StudentsGroup;
 using EducationCenter.Service.Exceptions;
 using EducationCenter.Service.Interfaces;
+using EducationCenter.Service.Services.Paginations;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationCenter.Service.Services;
@@ -29,11 +30,19 @@ public class StudentGroupService : IStudentGroupService
         return await this.studentGroupRepository.SaveChangeAsync();
     }
 
-    public async Task<IEnumerable<StudentGroupForResultDto>> GetAllAsync()
+    public async Task<IEnumerable<StudentGroupForResultDto>> GetAllAsync(Pagination pagination)
     {
+        pagination ??= new Pagination
+        {
+            PageNumber = 1,
+            PageSize = 10
+        };
+
         var studentGroups = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
             .OrderBy(sg => sg.Id)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .ToListAsync();
 
         return this.mapper.Map<IEnumerable<StudentGroupForResultDto>>(studentGroups);
