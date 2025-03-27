@@ -6,7 +6,6 @@ public class Pagination
 {
     private int pageSize;
 
-    [Range(1, int.MaxValue, ErrorMessage = "PageNumber must not be less than 1")]
     public int PageNumber { get; set; } = 1;
 
     public int PageSize
