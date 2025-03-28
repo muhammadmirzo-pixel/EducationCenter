@@ -18,7 +18,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(Pagination pagination)
+    public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
     {
         var result = await this.studentService.GetAllAsync(pagination);
         return Ok(result);

@@ -19,7 +19,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(Pagination pagination)
+    public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
     {
         var result = await this.groupService.GetAllAsync(pagination);
         return Ok(result);
