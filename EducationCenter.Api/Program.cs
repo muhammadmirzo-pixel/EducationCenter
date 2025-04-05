@@ -57,4 +57,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/test",() => "yangi bilimni tekshirish uchun test");
 app.Run();
