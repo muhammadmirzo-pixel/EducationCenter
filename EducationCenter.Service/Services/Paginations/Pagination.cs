@@ -15,7 +15,7 @@ public class Pagination
         {
             if (value <= 0)
                 pageSize = 10;
-            else if (value > 20)
+            else if (value >= 20)
                 pageSize = 20;
             else
                 pageSize = value;

@@ -32,7 +32,7 @@ public class CourseService : ICourseService
             throw new CustomException(409, "Course already exist");
 
         var course = this.mapper.Map<Course>(dto);
-        course.CreatedAt = DateTime.UtcNow;
+        course.CreatedAt = DateTime.Now;
         
         var insertedCourse = await this.courseRepository.InsertAsync(course);
         await this.courseRepository.SaveChangeAsync();
