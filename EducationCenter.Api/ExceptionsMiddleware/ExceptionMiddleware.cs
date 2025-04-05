@@ -1,31 +1,43 @@
-﻿using EducationCenter.Service.Exceptions;
+﻿using Azure;
+using EducationCenter.Service.Exceptions;
 
 namespace EducationCenter.Api.ExceptionsMiddleware;
 
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate requestDelegate;
-    
-    public ExceptionMiddleware(RequestDelegate requestDelegate)
+    private readonly ILogger<ExceptionMiddleware> logger;
+    public ExceptionMiddleware(RequestDelegate requestDelegate, ILogger<ExceptionMiddleware> logger)
     {
         this.requestDelegate = requestDelegate;
+        this.logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await this.requestDelegate(context);
+            await requestDelegate(context);
         }
         catch (CustomException ex)
         {
-            context.Response.StatusCode = ex.StatusCode;
-            await context.Response.WriteAsJsonAsync(new { StatusCode = ex.StatusCode, message = ex.Message }); 
+            this.logger.LogError(ex.Message);
+            context.Response.StatusCode = ex.statusCode;
+            await context.Response.WriteAsJsonAsync(new
+            { 
+                StatusCode = ex.statusCode, 
+                Message = ex.Message 
+            }); 
         }
         catch (Exception ex)
         {
+            this.logger.LogError($"{ex.Message}\n\n");
             context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+            await context.Response.WriteAsJsonAsync(new 
+            { 
+                statusCode = 500,
+                message = ex.Message 
+            });
         }
     }
 }
