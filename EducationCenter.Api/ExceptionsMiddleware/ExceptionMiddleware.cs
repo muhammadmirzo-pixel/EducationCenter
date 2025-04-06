@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EducationCenter.Service.Exceptions;
+using EducationCenter.Api.Models;
 
 namespace EducationCenter.Api.ExceptionsMiddleware;
 
@@ -23,20 +24,20 @@ public class ExceptionMiddleware
         {
             this.logger.LogError(ex.Message);
             context.Response.StatusCode = ex.statusCode;
-            await context.Response.WriteAsJsonAsync(new
-            { 
-                StatusCode = ex.statusCode, 
-                Message = ex.Message 
-            }); 
+            await context.Response.WriteAsJsonAsync(new Models.Response
+            {
+                StatusCode = ex.statusCode,
+                Message = ex.Message
+            });
         }
         catch (Exception ex)
         {
             this.logger.LogError($"{ex.Message}\n\n");
             context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(new 
+            await context.Response.WriteAsJsonAsync(new Models.Response
             { 
-                statusCode = 500,
-                message = ex.Message 
+                StatusCode = 500,
+                Message = ex.Message 
             });
         }
     }
