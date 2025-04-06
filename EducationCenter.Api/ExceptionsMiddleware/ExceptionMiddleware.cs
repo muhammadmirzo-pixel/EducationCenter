@@ -32,12 +32,12 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            this.logger.LogError($"{ex.Message}\n\n");
+            this.logger.LogError(ex.Message);
             context.Response.StatusCode = 500;
             await context.Response.WriteAsJsonAsync(new Models.Response
-            { 
+            {
                 StatusCode = 500,
-                Message = ex.Message 
+                Message = ex.Message
             });
         }
     }
