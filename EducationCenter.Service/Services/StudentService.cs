@@ -26,7 +26,7 @@ public class StudentService : IStudentService
             .FirstOrDefaultAsync(g => g.Email == dto.Email);
 
         if (group is not null)
-            throw new CustomException(404, "group is already exist");
+            throw new CustomException(404, "student is already exist");
 
         var student = this.mapper.Map<Student>(dto);
         student.CreatedAt = DateTime.UtcNow;
