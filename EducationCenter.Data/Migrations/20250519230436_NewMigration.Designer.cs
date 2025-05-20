@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducationCenter.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250405101720_NewMigration")]
+    [Migration("20250519230436_NewMigration")]
     partial class NewMigration
     {
         /// <inheritdoc />
@@ -99,6 +99,9 @@ namespace EducationCenter.Data.Migrations
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
