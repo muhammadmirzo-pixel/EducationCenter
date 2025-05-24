@@ -13,7 +13,7 @@ namespace EducationCenter.Tests.Integrations;
 public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    
+
     private async Task<long> CreateStudentAsync()
     {
         var dto = new StudentForCreationDto
@@ -30,7 +30,7 @@ public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicati
         var createdStudent = await response.Content.ReadFromJsonAsync<StudentForResultDto>();
         return createdStudent!.Id;
     }
-    
+
     private async Task<long> CreateGroupAsync()
     {
         var dto = new GroupForCreationDto
@@ -45,7 +45,7 @@ public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicati
         var createdGroup = await response.Content.ReadFromJsonAsync<GroupForResultDto>();
         return createdGroup!.Id;
     }
-    
+
 
     public StudentGroupControllerIntegrationTests(WebApplicationFactory<Program> factory)
     {
