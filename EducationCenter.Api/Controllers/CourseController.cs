@@ -39,6 +39,8 @@ public class CourseController : ControllerBase
     public async Task<ActionResult<CourseForResultDto>> GetByIdAsync(long id)
     {
         var result = await this.courseService.GetByIdAsync(id);
+        if (result == null)
+            return NotFound();
         return Ok(result);
     }
 

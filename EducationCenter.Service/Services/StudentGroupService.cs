@@ -61,7 +61,7 @@ public class StudentGroupService : IStudentGroupService
     {
         var studentGroup = await this.studentGroupRepository.GetAll()
             .AsNoTracking()
-            .Where(g => g.Student.FirstName.Contains(name))
+            .Where(g => g.)
             .OrderBy(Group => Group.Id)
             .ToListAsync();
         if (studentGroup == null)

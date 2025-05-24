@@ -1,10 +1,11 @@
+using EducationCenter.Api.ExceptionsMiddleware;
 using EducationCenter.Api.Extensions;
 using EducationCenter.Data.DbContexts;
 using EducationCenter.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-public partial class Program
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -42,6 +43,8 @@ public partial class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseMiddleware<ExceptionMiddleware>();   
 
         app.UseHttpsRedirection();
 

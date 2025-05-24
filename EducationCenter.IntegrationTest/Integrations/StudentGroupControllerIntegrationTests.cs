@@ -4,14 +4,48 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using EducationCenter.Api;
 using EducationCenter.Service.DTOs.StudentsGroup;
-using EducationCenter.Service.DTOs.Groups;
+
 using EducationCenter.Service.DTOs.Students;
+using EducationCenter.Service.DTOs.Groups;
 
 namespace EducationCenter.Tests.Integrations;
 
 public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    
+    private async Task<long> CreateStudentAsync()
+    {
+        var dto = new StudentForCreationDto
+        {
+            FirstName = "Test",
+            LastName = "Student",
+            Email = $"test{Guid.NewGuid().ToString()}@example.com",
+            Password = "P4$$w0rd"
+        };
+
+        var response = await _client.PostAsJsonAsync("api/student", dto);
+        response.EnsureSuccessStatusCode();
+
+        var createdStudent = await response.Content.ReadFromJsonAsync<StudentForResultDto>();
+        return createdStudent!.Id;
+    }
+    
+    private async Task<long> CreateGroupAsync()
+    {
+        var dto = new GroupForCreationDto
+        {
+            CourseId = 1,
+            GroupName = $"Group-{Guid.NewGuid().ToString()}"
+        };
+
+        var response = await _client.PostAsJsonAsync("api/group", dto);
+        response.EnsureSuccessStatusCode();
+
+        var createdGroup = await response.Content.ReadFromJsonAsync<GroupForResultDto>();
+        return createdGroup!.Id;
+    }
+    
 
     public StudentGroupControllerIntegrationTests(WebApplicationFactory<Program> factory)
     {
@@ -19,54 +53,105 @@ public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicati
     }
 
     [Fact]
-    public async Task TestGetAll()
+
+    public async Task ShouldGetAllStudentGroupsAsync()
     {
         var response = await _client.GetAsync("/api/studentGroup");
         response.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task TestPostAsync()
-    {
-        var group = new StudentGroupForCreationDto { StudentId = 1, GroupId = 1};
-        var groupResponse = await _client.PostAsJsonAsync("/api/studentGroup", group);
-        groupResponse.EnsureSuccessStatusCode();
-        var createdGroup = await groupResponse.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
 
-        Assert.Equal(group.StudentId, createdGroup.StudentId);
-        Assert.Equal(group.GroupId, createdGroup.GroupId);
-    }
-
-    [Fact]
-    public async Task TestGetById()
+    public async Task ShouldCreateStudentGroupAsync()
     {
-        var create = new StudentGroupForResultDto { Id = 1, StudentId = 1, GroupId = 1 };
-        var postResp = await _client.PostAsJsonAsync("/api/studentgroup", create);
-        var created = await postResp.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
-        var response = await _client.GetAsync($"/api/studentgroup/{created.Id}");
+        long studentId = await CreateStudentAsync();
+        long groupId = await CreateGroupAsync();
+
+        var dto = new StudentGroupForCreationDto
+        {
+            StudentId = studentId,
+            GroupId = groupId
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/studentGroup", dto);
         response.EnsureSuccessStatusCode();
+
+        var created = await response.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+
+        Assert.NotNull(created);
+        Assert.Equal(dto.StudentId, created!.StudentId);
+        Assert.Equal(dto.GroupId, created.GroupId);
     }
 
     [Fact]
-    public async Task TestUpdateStudentGroup()
+    public async Task ShouldGetStudentGroupByIdAsync()
     {
-        var create = new StudentGroupForResultDto { Id = 1, StudentId = 1, GroupId = 1 };
-        var postResp = await _client.PostAsJsonAsync("/api/studentgroup", create);
-        var created = await postResp.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+        long studentId = await CreateStudentAsync();
+        long groupId = await CreateGroupAsync();
 
-        var update = new StudentGroupForUpdateDto { /* required fields for update */ };
-        var putResp = await _client.PutAsJsonAsync($"/api/studentgroup/{created.Id}", update);
-        putResp.EnsureSuccessStatusCode();
+        var dto = new StudentGroupForCreationDto
+        {
+            StudentId = studentId,
+            GroupId = groupId
+        };
+
+        var postResponse = await _client.PostAsJsonAsync("/api/studentGroup", dto);
+        postResponse.EnsureSuccessStatusCode();
+
+        var created = await postResponse.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+        Assert.NotNull(created);
+
+        var getResponse = await _client.GetAsync($"/api/studentGroup/{created!.Id}");
+        getResponse.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task TestDeleteStudentGroup()
+    public async Task ShouldUpdateStudentGroupAsync()
     {
-        var delete = new bool {  };
-        var postResp = await _client.PostAsJsonAsync("/api/studentgroup", delete);
-        var created = await postResp.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+        long studentId = await CreateStudentAsync();
+        long groupId = await CreateGroupAsync();
 
-        var delResp = await _client.DeleteAsync($"/api/studentgroup/{delete}");
-        delResp.EnsureSuccessStatusCode();
+        var dto = new StudentGroupForCreationDto
+        {
+            StudentId = studentId,
+            GroupId = groupId
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("/api/studentGroup", dto);
+        createResponse.EnsureSuccessStatusCode();
+
+        var created = await createResponse.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+        Assert.NotNull(created);
+
+        var updateDto = new StudentGroupForUpdateDto
+        {
+            StudentId = studentId,
+            GroupId = groupId
+        };
+
+        var updateResponse = await _client.PutAsJsonAsync($"/api/studentGroup/{created!.Id}", updateDto);
+        updateResponse.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task ShouldDeleteStudentGroupAsync()
+    {
+        long studentId = await CreateStudentAsync();
+        long groupId = await CreateGroupAsync();
+
+        var dto = new StudentGroupForCreationDto
+        {
+            StudentId = studentId,
+            GroupId = groupId
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("/api/studentGroup", dto);
+        createResponse.EnsureSuccessStatusCode();
+
+        var created = await createResponse.Content.ReadFromJsonAsync<StudentGroupForResultDto>();
+        Assert.NotNull(created);
+
+        var deleteResponse = await _client.DeleteAsync($"/api/studentGroup/{created!.Id}");
+        deleteResponse.EnsureSuccessStatusCode();
     }
 }
