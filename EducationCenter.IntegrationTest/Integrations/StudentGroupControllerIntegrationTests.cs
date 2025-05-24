@@ -4,6 +4,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using EducationCenter.Api;
 using EducationCenter.Service.DTOs.StudentsGroup;
+
 using EducationCenter.Service.DTOs.Students;
 using EducationCenter.Service.DTOs.Groups;
 
@@ -12,7 +13,7 @@ namespace EducationCenter.Tests.Integrations;
 public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-
+    
     private async Task<long> CreateStudentAsync()
     {
         var dto = new StudentForCreationDto
@@ -52,6 +53,7 @@ public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicati
     }
 
     [Fact]
+
     public async Task ShouldGetAllStudentGroupsAsync()
     {
         var response = await _client.GetAsync("/api/studentGroup");
@@ -59,6 +61,7 @@ public class StudentGroupControllerIntegrationTests : IClassFixture<WebApplicati
     }
 
     [Fact]
+
     public async Task ShouldCreateStudentGroupAsync()
     {
         long studentId = await CreateStudentAsync();

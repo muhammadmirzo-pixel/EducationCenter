@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationCenter.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class StudentController : ControllerBase

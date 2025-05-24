@@ -14,7 +14,6 @@ public class EducationCenterWebAppFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-
             builder.ConfigureAppConfiguration((context, config) =>
             {
                 //uploading appsettings.Test.json from the program file

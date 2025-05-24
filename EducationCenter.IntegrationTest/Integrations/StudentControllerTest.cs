@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -19,7 +19,6 @@ public class StudentControllerIntegrationTests : IClassFixture<WebApplicationFac
     }
 
     [Fact]
-    public async Task ShouldReturnAllStudents_WhenRequested()
     {
         var response = await _client.GetAsync("/api/student");
         response.EnsureSuccessStatusCode();
@@ -73,7 +72,6 @@ public class StudentControllerIntegrationTests : IClassFixture<WebApplicationFac
         var studentDto = new StudentForCreationDto { FirstName = "Ali" };
 
         await _client.PostAsJsonAsync("/api/student", studentDto);
-
         var response = await _client.GetAsync("/api/student/search?name=Ali");
         response.EnsureSuccessStatusCode();
     }

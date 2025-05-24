@@ -1,4 +1,4 @@
-﻿using EducationCenter.Service.DTOs.Groups;
+using EducationCenter.Service.DTOs.Groups;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
