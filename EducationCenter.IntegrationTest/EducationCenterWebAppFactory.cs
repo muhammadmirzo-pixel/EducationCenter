@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace EducationCenter.IntegrationTests;
 
@@ -13,7 +14,16 @@ public class EducationCenterWebAppFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            // Testing uchun bazani sozlash:
+
+            builder.ConfigureAppConfiguration((context, config) =>
+            {
+                //uploading appsettings.Test.json from the program file
+                config.AddJsonFile("appsettings.Test.json");
+            });
+
+
+
+            // setting up a database for testing
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                      typeof(DbContextOptions<AppDbContext>));
