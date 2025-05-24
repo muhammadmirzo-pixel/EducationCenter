@@ -19,6 +19,7 @@ public class StudentControllerIntegrationTests : IClassFixture<WebApplicationFac
     }
 
     [Fact]
+    public async Task ShouldReturnAllStudents_WhenRequested()
     {
         var response = await _client.GetAsync("/api/student");
         response.EnsureSuccessStatusCode();
